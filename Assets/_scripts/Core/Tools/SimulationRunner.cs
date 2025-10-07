@@ -21,6 +21,7 @@ namespace MatchTree.Core.Tools
         private TurnManager turnManager;
 
         public Board Board => board;
+        public EventBus Bus => eventBus;
 
         void Start()
         {
@@ -54,6 +55,9 @@ namespace MatchTree.Core.Tools
             resolver.Resolve(board);
 
             turnManager = new TurnManager(commandBus, eventBus, board, moveValidator, resolver);
+
+            // Emit level start
+            eventBus.Publish(new LevelStartEvent { LevelId = Level.Id, Seed = Level.Seed, Width = Level.Width, Height = Level.Height });
         }
 
         void Update()
