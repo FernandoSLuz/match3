@@ -274,7 +274,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Runner: {fileID: 1117689033}
-  View: {fileID: 754443398}
+  SimpleView: {fileID: 0}
+  AnimatedView: {fileID: 754443400}
   Padding: 1
   CenterOnBoard: 1
 --- !u!1 &395237608
@@ -332,7 +333,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 754443399}
-  - component: {fileID: 754443398}
+  - component: {fileID: 754443400}
   m_Layer: 0
   m_Name: SimpleBoardView
   m_TagString: Untagged
@@ -340,25 +341,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &754443398
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 754443397}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de143b31488bef14fa87dc71f2565acb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Runner: {fileID: 1117689033}
-  TileSize: 1
-  Red: {fileID: 21300000, guid: 9cbcb13bcc2d775489ff5f48ea9276b6, type: 3}
-  Blue: {fileID: 21300000, guid: b8d47ea0768ef0a4a8a323c2abd78461, type: 3}
-  Green: {fileID: 21300000, guid: 1e4ca2d08dc6cd94887bfaf372f71d62, type: 3}
-  Yellow: {fileID: 21300000, guid: 326f8f049f369d0498b817eed06c4cb2, type: 3}
-  Purple: {fileID: 21300000, guid: 8834cfbe00fe81447aeca19f7db75db9, type: 3}
 --- !u!4 &754443399
 Transform:
   m_ObjectHideFlags: 0
@@ -374,6 +356,26 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &754443400
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 754443397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3038a0574d19a34c8b446526d8504a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Runner: {fileID: 1117689033}
+  Transitions: {fileID: 11400000, guid: bb1075bdaec5dd74bb9371520729b72e, type: 2}
+  TileSize: 1
+  Red: {fileID: 21300000, guid: 9cbcb13bcc2d775489ff5f48ea9276b6, type: 3}
+  Blue: {fileID: 21300000, guid: b8d47ea0768ef0a4a8a323c2abd78461, type: 3}
+  Green: {fileID: 21300000, guid: 1e4ca2d08dc6cd94887bfaf372f71d62, type: 3}
+  Yellow: {fileID: 21300000, guid: 326f8f049f369d0498b817eed06c4cb2, type: 3}
+  Purple: {fileID: 21300000, guid: 8834cfbe00fe81447aeca19f7db75db9, type: 3}
 --- !u!1 &1117689032
 GameObject:
   m_ObjectHideFlags: 0

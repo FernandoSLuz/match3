@@ -2,15 +2,30 @@
 
 ## Game Events
 
-- LevelStartEvent: `LevelId`, `Seed`, `Width`, `Height`
-- MoveAttemptedEvent: `TurnIndex`, `From`, `To`, `Valid`
-- CascadeEndEvent: `Index`, `TilesFallen`, `TimeMs`
-- LevelEndEvent: `Result`, `TurnsUsed`, `TimeTotalMs`
+- **LevelStartEvent**: `LevelId`, `Seed`, `Width`, `Height`
+- **MoveAttemptedEvent**: `TurnIndex`, `From`, `To`, `Valid`
+- **SwapPerformedEvent**: `TurnIndex`, `From`, `To` — fired after successful swap
+- **TilesRemovedEvent**: `TurnIndex`, `CascadeIndex`, `Positions[]` — matched tiles about to be removed
+- **TilesMovedEvent**: `TurnIndex`, `CascadeIndex`, `Moves[(from,to)][]` — gravity moving tiles
+- **TilesSpawnedEvent**: `TurnIndex`, `CascadeIndex`, `Positions[]` — new tiles appearing
+- **AnimationCompleteEvent**: (no data) — signals animation step finished
+- **CascadeEndEvent**: `Index`, `TilesFallen`, `TimeMs` — cascade finished
+- **LevelEndEvent**: `Result`, `TurnsUsed`, `TimeTotalMs`
+
+## Event Flow per Turn
+
+1. `MoveAttemptedEvent` (validation)
+2. `SwapPerformedEvent` → `AnimationCompleteEvent` (swap animation)
+3. For each cascade:
+   - `TilesRemovedEvent` → `AnimationCompleteEvent` (shake + fade)
+   - `TilesMovedEvent` → `AnimationCompleteEvent` (gravity fall)
+   - `TilesSpawnedEvent` → `AnimationCompleteEvent` (spawn)
+   - `CascadeEndEvent`
 
 Example subscription:
 ```csharp
-bus.Subscribe<MoveAttemptedEvent>(e => {
-    Debug.Log($"move_attempted turn={e.TurnIndex} valid={e.Valid}");
+bus.Subscribe<TilesRemovedEvent>(e => {
+    Debug.Log($"Removed {e.Positions.Count} tiles in cascade {e.CascadeIndex}");
 });
 ```
 

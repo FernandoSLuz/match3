@@ -4,9 +4,9 @@ namespace MatchTree.Core.Domain.Resolver
 {
     public class VerticalGravity : IGravity
     {
-        public int Apply(Board board)
+        public System.Collections.Generic.List<TileMove> Apply(Board board)
         {
-            var moved = 0;
+            var moves = new System.Collections.Generic.List<TileMove>();
             for (var x = 0; x < board.Width; x++)
             {
                 var writeY = 0;
@@ -17,15 +17,17 @@ namespace MatchTree.Core.Domain.Resolver
                     {
                         if (y != writeY)
                         {
+                            var from = new BoardPosition(x, y);
+                            var to = new BoardPosition(x, writeY);
                             board.SetAt(x, writeY, tile);
                             board.ClearAt(x, y);
-                            moved++;
+                            moves.Add(new TileMove(tile, from, to));
                         }
                         writeY++;
                     }
                 }
             }
-            return moved;
+            return moves;
         }
     }
 }
