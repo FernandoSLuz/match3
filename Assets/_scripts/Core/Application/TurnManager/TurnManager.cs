@@ -46,6 +46,11 @@ namespace MatchTree.Core.Application.TurnManager
 
                 board.Swap(swap.From, swap.To);
                 var result = resolver.Resolve(board);
+                for (var i = 0; i < result.Cascades.Count; i++)
+                {
+                    var c = result.Cascades[i];
+                    eventBus.Publish(new CascadeEndEvent { Index = i, TilesFallen = c.TilesMoved, TimeMs = 0 });
+                }
                 turnIndex++;
             }
         }
