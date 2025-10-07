@@ -66,17 +66,20 @@ namespace MatchTree.Core.Application.TurnManager
             // Validate
             var valid = moveValidator.IsValidSwap(board, swap.From, swap.To);
             eventBus.Publish(new MoveAttemptedEvent { TurnIndex = turnIndex, From = swap.From, To = swap.To, Valid = valid });
-            
+
             if (!valid)
             {
+                // Visual swap-out-and-back only
+                eventBus.Publish(new SwapVisualEvent { TurnIndex = turnIndex, From = swap.From, To = swap.To, Revert = true });
+                yield return waitCallback();
                 isProcessing = false;
                 yield break;
             }
 
-            // Perform swap
-            board.Swap(swap.From, swap.To);
-            eventBus.Publish(new SwapPerformedEvent { TurnIndex = turnIndex, From = swap.From, To = swap.To });
+            // Visual swap and commit board
+            eventBus.Publish(new SwapVisualEvent { TurnIndex = turnIndex, From = swap.From, To = swap.To, Revert = false });
             yield return waitCallback();
+            board.Swap(swap.From, swap.To);
 
             // Process cascades one at a time
             var cascadeIndex = 0;

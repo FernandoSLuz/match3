@@ -46,7 +46,7 @@ namespace MatchTree.Core.Presentation.Views
             while (Runner == null || Runner.Bus == null) yield return null;
             eventBus = Runner.Bus;
             eventBus.Subscribe<LevelStartEvent>(OnLevelStart);
-            eventBus.Subscribe<SwapPerformedEvent>(OnSwapPerformed);
+            eventBus.Subscribe<SwapVisualEvent>(OnSwapVisual);
             eventBus.Subscribe<TilesRemovedEvent>(OnTilesRemoved);
             eventBus.Subscribe<TilesMovedEvent>(OnTilesMoved);
             eventBus.Subscribe<TilesSpawnedEvent>(OnTilesSpawned);
@@ -120,12 +120,87 @@ namespace MatchTree.Core.Presentation.Views
             }
         }
 
-        private void OnSwapPerformed(SwapPerformedEvent e)
+        // Selection visuals
+        private BoardPosition? selectedPos;
+        private Coroutine wobbleRoutine;
+
+        private void OnEnable()
         {
-            StartCoroutine(AnimateSwap(e.From, e.To));
+            // Extra safety: subscribe selection events even if Late-bound
+            StartCoroutine(EnsureSelectionSubscriptions());
         }
 
-        private IEnumerator AnimateSwap(BoardPosition a, BoardPosition b)
+        private IEnumerator EnsureSelectionSubscriptions()
+        {
+            while (Runner == null || Runner.Bus == null) yield return null;
+            Runner.Bus.Subscribe<TileSelectedEvent>(OnTileSelected);
+            Runner.Bus.Subscribe<TileDeselectedEvent>(OnTileDeselected);
+        }
+
+        private void OnTileSelected(TileSelectedEvent e)
+        {
+            selectedPos = e.Position;
+            if (wobbleRoutine != null) StopCoroutine(wobbleRoutine);
+            wobbleRoutine = StartCoroutine(WobbleSelected());
+        }
+
+        private void OnTileDeselected(TileDeselectedEvent e)
+        {
+            if (selectedPos.HasValue && selectedPos.Value.X == e.Position.X && selectedPos.Value.Y == e.Position.Y)
+            {
+                selectedPos = null;
+                if (wobbleRoutine != null) StopCoroutine(wobbleRoutine);
+                wobbleRoutine = null;
+                SyncToBoard();
+            }
+        }
+
+        private IEnumerator WobbleSelected()
+        {
+            while (selectedPos.HasValue)
+            {
+                var p = selectedPos.Value;
+                if (visuals != null && p.X >= 0 && p.Y >= 0 && p.X < visuals.GetLength(0) && p.Y < visuals.GetLength(1))
+                {
+                    var go = visuals[p.X, p.Y];
+                    if (go != null)
+                    {
+                        // Continuous wobble loop while selected
+                        float t = 0f;
+                        float baseScale = 1.08f;
+                        float wobbleAmp = 0.05f;
+                        float wobbleSpeed = 6.0f; // radians/sec
+                        while (selectedPos.HasValue && selectedPos.Value.X == p.X && selectedPos.Value.Y == p.Y)
+                        {
+                            t += Time.deltaTime * wobbleSpeed;
+                            var scale = baseScale + Mathf.Sin(t) * wobbleAmp;
+                            go.transform.localScale = new Vector3(scale, scale, 1f);
+                            yield return null;
+                        }
+                    }
+                }
+                yield return null;
+            }
+            // Reset all scales when deselected
+            if (visuals != null)
+            {
+                for (var x = 0; x < visuals.GetLength(0); x++)
+                {
+                    for (var y = 0; y < visuals.GetLength(1); y++)
+                    {
+                        var go = visuals[x, y];
+                        if (go != null) go.transform.localScale = Vector3.one;
+                    }
+                }
+            }
+        }
+
+        private void OnSwapVisual(SwapVisualEvent e)
+        {
+            StartCoroutine(AnimateSwap(e.From, e.To, e.Revert));
+        }
+
+        private IEnumerator AnimateSwap(BoardPosition a, BoardPosition b, bool revert)
         {
             var board = Runner.Board;
             if (board != null) EnsureGrid(board);
@@ -156,10 +231,29 @@ namespace MatchTree.Core.Presentation.Views
             aGo.transform.localPosition = aEnd;
             bGo.transform.localPosition = bEnd;
 
-            // Swap references so mapping matches new board state
-            var tmp = visuals[b.X, b.Y];
-            visuals[b.X, b.Y] = visuals[a.X, a.Y];
-            visuals[a.X, a.Y] = tmp;
+            if (!revert)
+            {
+                // Swap references so mapping matches board state
+                var tmp = visuals[b.X, b.Y];
+                visuals[b.X, b.Y] = visuals[a.X, a.Y];
+                visuals[a.X, a.Y] = tmp;
+            }
+            else
+            {
+                // animate back
+                var backDuration = Transitions.SwapDuration;
+                float tt = 0f;
+                while (tt < backDuration)
+                {
+                    tt += Time.deltaTime;
+                    var kk = Mathf.Clamp01(tt / backDuration);
+                    aGo.transform.localPosition = Vector3.Lerp(aEnd, aStart, kk);
+                    bGo.transform.localPosition = Vector3.Lerp(bEnd, bStart, kk);
+                    yield return null;
+                }
+                aGo.transform.localPosition = aStart;
+                bGo.transform.localPosition = bStart;
+            }
 
             eventBus.Publish(new AnimationCompleteEvent());
         }
