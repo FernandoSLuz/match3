@@ -18,7 +18,7 @@ namespace MatchTree.Core.Tools
         private CommandBus commandBus;
         private EventBus eventBus;
         private Board board;
-        private TurnManager.TurnManager turnManager;
+        private TurnManager turnManager;
 
         public Board Board => board;
 
@@ -53,7 +53,7 @@ namespace MatchTree.Core.Tools
             // Resolve any accidental initial matches
             resolver.Resolve(board);
 
-            turnManager = new TurnManager.TurnManager(commandBus, eventBus, board, moveValidator, resolver);
+            turnManager = new TurnManager(commandBus, eventBus, board, moveValidator, resolver);
         }
 
         void Update()
