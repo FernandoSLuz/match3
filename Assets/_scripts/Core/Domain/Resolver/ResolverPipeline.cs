@@ -27,23 +27,23 @@ namespace MatchTree.Core.Domain.Resolver
                 var matches = matchFinder.FindMatches(board);
                 if (matches.Count == 0) break;
 
-                var removedCount = 0;
+                var removals = new System.Collections.Generic.List<BoardState.TileRemovalInfo>();
                 foreach (var group in matches)
                 {
-                    removedCount += board.RemovePositions(group);
+                    removals.AddRange(board.RemovePositionsWithInfo(group));
                 }
 
-                var moved = gravity.Apply(board);
-                var filled = Fill(board);
-                cascades.Add(new CascadeResult(removedCount, moved, filled));
+                var moves = gravity.Apply(board);
+                var spawnInfos = FillWithInfo(board);
+                cascades.Add(CascadeResult.From(removals, moves, spawnInfos));
             }
 
             return new ResolutionResult(cascades);
         }
 
-        private int Fill(Board board)
+        private System.Collections.Generic.List<TileSpawn> FillWithInfo(Board board)
         {
-            var spawned = 0;
+            var spawns = new System.Collections.Generic.List<TileSpawn>();
             for (var x = 0; x < board.Width; x++)
             {
                 for (var y = 0; y < board.Height; y++)
@@ -52,25 +52,23 @@ namespace MatchTree.Core.Domain.Resolver
                     {
                         var tile = spawner.CreateTile(x, y);
                         board.SetAt(x, y, tile);
-                        spawned++;
+                        spawns.Add(new TileSpawn(tile, new BoardPosition(x, y)));
                     }
                 }
             }
-            return spawned;
+            return spawns;
         }
     }
 
     public struct CascadeResult
     {
-        public int TilesRemoved;
-        public int TilesMoved;
-        public int TilesSpawned;
+        public System.Collections.Generic.List<BoardState.TileRemovalInfo> Removals;
+        public System.Collections.Generic.List<TileMove> Moves;
+        public System.Collections.Generic.List<TileSpawn> Spawns;
 
-        public CascadeResult(int removed, int moved, int spawned)
+        public static CascadeResult From(System.Collections.Generic.List<BoardState.TileRemovalInfo> removals, System.Collections.Generic.List<TileMove> moves, System.Collections.Generic.List<TileSpawn> spawns)
         {
-            TilesRemoved = removed;
-            TilesMoved = moved;
-            TilesSpawned = spawned;
+            return new CascadeResult { Removals = removals, Moves = moves, Spawns = spawns };
         }
     }
 
@@ -86,7 +84,7 @@ namespace MatchTree.Core.Domain.Resolver
         public int TotalRemoved()
         {
             var sum = 0;
-            foreach (var c in Cascades) sum += c.TilesRemoved;
+            foreach (var c in Cascades) sum += c.Removals.Count;
             return sum;
         }
     }

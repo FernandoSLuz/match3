@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using MatchTree.Core.Configs;
 using MatchTree.Core.Application.CommandBus;
@@ -19,6 +20,10 @@ namespace MatchTree.Core.Tools
         private EventBus eventBus;
         private Board board;
         private TurnManager turnManager;
+        private IMatchFinder matchFinder;
+        private IGravity gravity;
+        private ISpawner spawner;
+        private bool animationComplete;
 
         public Board Board => board;
         public EventBus Bus => eventBus;
@@ -36,11 +41,10 @@ namespace MatchTree.Core.Tools
             eventBus = new EventBus();
 
             board = new Board(Level.Width, Level.Height);
-            var matchFinder = new SimpleLineMatchFinder();
+            matchFinder = new SimpleLineMatchFinder();
             var moveValidator = new AdjacentSwapValidator(matchFinder);
-            var gravity = new VerticalGravity();
-            var spawner = new UniformColorSpawner(Level.Seed, Level.Colors);
-            var resolver = new ResolverPipeline(matchFinder, gravity, spawner);
+            gravity = new VerticalGravity();
+            spawner = new UniformColorSpawner(Level.Seed, Level.Colors);
 
             // Initial fill
             for (var x = 0; x < Level.Width; x++)
@@ -51,10 +55,14 @@ namespace MatchTree.Core.Tools
                 }
             }
 
-            // Resolve any accidental initial matches
+            // Resolve any accidental initial matches silently
+            var resolver = new ResolverPipeline(matchFinder, gravity, spawner);
             resolver.Resolve(board);
 
-            turnManager = new TurnManager(commandBus, eventBus, board, moveValidator, resolver);
+            turnManager = new TurnManager(commandBus, eventBus, board, moveValidator, matchFinder, gravity, spawner);
+
+            // Subscribe to animation completion
+            eventBus.Subscribe<AnimationCompleteEvent>(e => animationComplete = true);
 
             // Emit level start
             eventBus.Publish(new LevelStartEvent { LevelId = Level.Id, Seed = Level.Seed, Width = Level.Width, Height = Level.Height });
@@ -62,7 +70,24 @@ namespace MatchTree.Core.Tools
 
         void Update()
         {
-            turnManager.Tick();
+            if (turnManager.IsProcessing) return;
+
+            if (turnManager.TryDequeueCommand(out var cmd))
+            {
+                if (cmd is SwapTilesCommand swap)
+                {
+                    StartCoroutine(turnManager.ProcessSwap(swap, WaitForAnimation));
+                }
+            }
+        }
+
+        private IEnumerator WaitForAnimation()
+        {
+            animationComplete = false;
+            while (!animationComplete)
+            {
+                yield return null;
+            }
         }
 
         public void EnqueueSwap(int fromX, int fromY, int toX, int toY)

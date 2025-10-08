@@ -1,10 +1,25 @@
 # Presentation Layer
 
 ## Views
-- `SimpleBoardView`: renders tiles as Sprites based on `TileColor`.
+- `AnimatedBoardView`: Subscribes to game events and plays sequenced transitions (swap, shake, fade, fall, spawn) using `TransitionConfig`.
 
 ## Input
-- `SimpleClickInput`: click two tiles to enqueue a swap on the `SimulationRunner`.
+- `SimpleClickInput`: Click two tiles to enqueue a swap command.
 
 ## Camera
-- `CameraFit2D`: fits orthographic camera to the board using `SimpleBoardView.TileSize` and centers.
+- `CameraFit2D`: Fits orthographic camera to the board using `AnimatedBoardView.TileSize`.
+
+## Animation Flow
+
+The system now sequences animations **step-by-step** with the domain layer:
+
+1. **Swap Animation** → Visual swap, then domain validates and swaps
+2. **Match Check** → Domain finds matches
+3. **Shake + Fade** → Tiles shake, then fade out on removal
+4. **Gravity Animation** → Tiles fall to fill gaps
+5. **Spawn Animation** → New tiles appear from above
+6. **Repeat 2-5** until no more matches
+
+Each animation step publishes `AnimationCompleteEvent` when finished, allowing the `TurnManager` to proceed to the next cascade.
+
+All timings and magnitudes are configured in `TransitionConfig`.

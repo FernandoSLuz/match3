@@ -68,6 +68,21 @@ namespace MatchTree.Core.Domain.BoardState
             }
             return removed;
         }
+
+        public System.Collections.Generic.List<TileRemovalInfo> RemovePositionsWithInfo(IEnumerable<BoardPosition> positions)
+        {
+            var infos = new System.Collections.Generic.List<TileRemovalInfo>();
+            foreach (var pos in positions)
+            {
+                var tile = grid[pos.X, pos.Y];
+                if (tile != null)
+                {
+                    infos.Add(new TileRemovalInfo(tile, pos));
+                    grid[pos.X, pos.Y] = null;
+                }
+            }
+            return infos;
+        }
     }
 }
 

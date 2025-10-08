@@ -4,8 +4,8 @@ namespace MatchTree.Core.Domain.Resolver
 {
     public interface IGravity
     {
-        // Returns number of tiles moved
-        int Apply(Board board);
+        // Returns list of moves applied by gravity for animation purposes
+        System.Collections.Generic.List<TileMove> Apply(Board board);
     }
 }
 

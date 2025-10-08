@@ -8,8 +8,8 @@ namespace MatchTree.Core.Presentation.Views
     public class CameraFit2D : MonoBehaviour
     {
         public SimulationRunner Runner;
-        public SimpleBoardView View; // Required for TileSize and origin
-        public float Padding = 0.5f; // World units padding around the board
+        public AnimatedBoardView BoardView;
+        public float Padding = 0.5f;
         public bool CenterOnBoard = true;
 
         private Camera cam;
@@ -36,7 +36,7 @@ namespace MatchTree.Core.Presentation.Views
         private void TryFitIfChanged(bool force)
         {
             if (cam == null) cam = GetComponent<Camera>();
-            if (cam == null) return;
+            if (cam == null || BoardView == null) return;
 
             if (!TryGetBoardSize(out var w, out var h)) return;
 
@@ -62,8 +62,7 @@ namespace MatchTree.Core.Presentation.Views
 
         private void FitToBoard(int width, int height)
         {
-            if (View == null) return;
-            var size = View.TileSize;
+            var size = BoardView.TileSize;
             var worldWidth = width * size + 2f * Padding;
             var worldHeight = height * size + 2f * Padding;
 
@@ -73,9 +72,7 @@ namespace MatchTree.Core.Presentation.Views
 
             if (!CenterOnBoard) return;
 
-            Transform origin = View != null ? View.transform : (Runner != null ? Runner.transform : null);
-            if (origin == null) return;
-
+            var origin = BoardView.transform;
             var centerLocal = new Vector3((width - 1) * size * 0.5f, (height - 1) * size * 0.5f, 0f);
             var centerWorld = origin.TransformPoint(centerLocal);
             var p = cam.transform.position;
