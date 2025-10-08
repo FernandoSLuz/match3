@@ -56,10 +56,13 @@ namespace MatchTree.Core.Presentation.Input
 					}
 					else
 					{
-						// Change selection to the new tile (no swap)
-						if (bus != null) bus.Publish(new TileDeselectedEvent { Position = new MatchTree.Core.Domain.BoardState.BoardPosition(from.x, from.y) });
-						selected = new Vector2Int(x, y);
-						if (bus != null) bus.Publish(new TileSelectedEvent { Position = new MatchTree.Core.Domain.BoardState.BoardPosition(x, y) });
+					// Change selection to the new tile (no swap). Ensure previous scaled back.
+					if (bus != null)
+					{
+						bus.Publish(new TileDeselectedEvent { Position = new MatchTree.Core.Domain.BoardState.BoardPosition(from.x, from.y) });
+						bus.Publish(new TileSelectedEvent { Position = new MatchTree.Core.Domain.BoardState.BoardPosition(x, y) });
+					}
+					selected = new Vector2Int(x, y);
 					}
                 }
             }

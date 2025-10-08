@@ -100,6 +100,7 @@ namespace MatchTree.Core.Presentation.Views
                     var sr = go.GetComponent<SpriteRenderer>();
                     sr.sprite = SpriteFor(tile.Color);
                     go.transform.localPosition = Pos(x, y);
+                    go.transform.localScale = Vector3.one;
                     sr.color = Color.white;
                 }
             }
@@ -151,6 +152,7 @@ namespace MatchTree.Core.Presentation.Views
                 selectedPos = null;
                 if (wobbleRoutine != null) StopCoroutine(wobbleRoutine);
                 wobbleRoutine = null;
+                ResetScaleAt(e.Position);
                 SyncToBoard();
             }
         }
@@ -193,6 +195,14 @@ namespace MatchTree.Core.Presentation.Views
                     }
                 }
             }
+        }
+
+        private void ResetScaleAt(BoardPosition pos)
+        {
+            if (visuals == null) return;
+            if (pos.X < 0 || pos.Y < 0 || pos.X >= visuals.GetLength(0) || pos.Y >= visuals.GetLength(1)) return;
+            var go = visuals[pos.X, pos.Y];
+            if (go != null) go.transform.localScale = Vector3.one;
         }
 
         private void OnSwapVisual(SwapVisualEvent e)
