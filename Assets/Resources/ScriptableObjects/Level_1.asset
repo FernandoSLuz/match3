@@ -9,11 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21bcc3513359b0c4987bb9592e407680, type: 3}
-  m_Name: TransitionConfig
+  m_Script: {fileID: 11500000, guid: 9cadfe5d37e64ab4d91b0d018d6c258f, type: 3}
+  m_Name: Level_1
   m_EditorClassIdentifier: 
-  SwapDuration: 0.2
-  FallDurationPerCell: 0.08
-  FadeOutDuration: 0.15
-  ShakeDuration: 0.15
-  ShakeMagnitude: 0.08
+  Id: level_001
+  Width: 8
+  Height: 8
+  Seed: 12345
+  Colors: 0100000002000000030000000400000005000000

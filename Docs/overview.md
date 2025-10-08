@@ -1,6 +1,6 @@
 # Overview
 
-MatchTree is a modular Match-3 engine for Unity focused on:
+Lighthouse is a modular Match-3 engine for Unity focused on:
 
 - Clean layering (Domain, Application, Infrastructure, Presentation)
 - Deterministic simulation via seed

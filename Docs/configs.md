@@ -13,4 +13,4 @@
 - ShakeDuration (s): length of shake before fade.
 - ShakeMagnitude (units): amplitude of shake.
 
-Create via: Create → MatchTree → TransitionConfig. Assign it to `AnimatedBoardView`.
+Create via: Create → Lighthouse → TransitionConfig. Assign it to `AnimatedBoardView`.
