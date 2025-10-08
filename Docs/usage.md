@@ -2,10 +2,10 @@
 
 ## Create Configs
 
-1. **LevelDef**: Create → MatchTree → LevelDef
+1. **LevelDef**: Create → Lighthouse → LevelDef
    - Configure Width, Height, Seed, Colors
 
-2. **TransitionConfig**: Create → MatchTree → TransitionConfig
+2. **TransitionConfig**: Create → Lighthouse → TransitionConfig
    - Set SwapDuration, FallDurationPerCell, FadeOutDuration, ShakeDuration, ShakeMagnitude
 
 ## Scene Wiring

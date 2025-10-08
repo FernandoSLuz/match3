@@ -1,4 +1,4 @@
-# MatchTree (Unity) – Modular Match-3 Engine
+# Lighthouse (Unity) – Modular Match-3 Engine
 
 A modular, testable, and extensible Match-3 engine for Unity. This repository contains a cleanly layered implementation with a deterministic simulation core, an event-driven application layer, and a minimal presentation to get you playing quickly.
 
@@ -15,7 +15,7 @@ A modular, testable, and extensible Match-3 engine for Unity. This repository co
 1) Open the project in Unity 2022+.
 
 2) Create a level configuration:
-- Right-click in Project window → Create → MatchTree → LevelDef
+- Right-click in Project window → Create → Lighthouse → LevelDef
 - Adjust `Width`, `Height`, `Seed`, and `Colors` (the 5 presets are fine)
 
 3) Create a scene setup:

@@ -1,6 +1,6 @@
 # Docs Index
 
-This folder contains detailed documentation for the MatchTree project.
+This folder contains detailed documentation for the Lighthouse project.
 
 ## Sections
 
