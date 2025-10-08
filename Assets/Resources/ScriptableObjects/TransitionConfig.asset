@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3195092e0898ee1439ba53f9eedfba7c, type: 3}
   m_Name: TransitionConfig
   m_EditorClassIdentifier: 
-  SwapDuration: 0.2
-  FallDurationPerCell: 0.08
-  FadeOutDuration: 0.15
-  ShakeDuration: 0.15
+  SwapDuration: 0.25
+  FallDurationPerCell: 0.25
+  FadeOutDuration: 0.25
+  ShakeDuration: 0.25
   ShakeMagnitude: 0.08

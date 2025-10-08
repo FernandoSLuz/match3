@@ -274,8 +274,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Runner: {fileID: 1117689033}
-  SimpleView: {fileID: 0}
-  AnimatedView: {fileID: 754443400}
+  BoardView: {fileID: 754443400}
   Padding: 1
   CenterOnBoard: 1
 --- !u!1 &395237608
@@ -335,7 +334,7 @@ GameObject:
   - component: {fileID: 754443399}
   - component: {fileID: 754443400}
   m_Layer: 0
-  m_Name: SimpleBoardView
+  m_Name: BoardView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
