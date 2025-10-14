@@ -2,13 +2,15 @@ using UnityEngine;
 using Lighthouse.Match3.Tools;
 using Lighthouse.Shared.EventBus;
 using Lighthouse.Match3.Application.Events;
+using Lighthouse.Match3.Presentation.Views;
 
 namespace Lighthouse.Match3.Presentation.Input
 {
     public class SimpleClickInput : MonoBehaviour
     {
         public SimulationRunner Runner;
-        public float TileSize = 1f;
+        public AnimatedBoardView BoardView;
+        public CameraFit2D Fitter; // source of camera and transform fit
 
         private Vector2Int? selected;
         private EventBus bus;
@@ -25,9 +27,18 @@ namespace Lighthouse.Match3.Presentation.Input
 			if (bus == null && Runner.Bus != null) bus = Runner.Bus;
             if (UnityEngine.Input.GetMouseButtonDown(0))
             {
-                var world = Camera.main.ScreenToWorldPoint(UnityEngine.Input.mousePosition);
-                var x = Mathf.RoundToInt(world.x / TileSize);
-                var y = Mathf.RoundToInt(world.y / TileSize);
+                var cam = Fitter != null ? Fitter.EffectiveCamera : Camera.main;
+                if (cam == null) return;
+				var screen = UnityEngine.Input.mousePosition;
+				var world = cam.ScreenToWorldPoint(new Vector3(screen.x, screen.y, Mathf.Abs(transform.position.z - cam.transform.position.z)));
+
+				// Convert to board-local space to account for board scale/offset
+                var t = BoardView != null ? BoardView.transform : null;
+                var tileSize = BoardView != null ? BoardView.TileSize : 1f;
+				Vector3 local = t != null ? t.InverseTransformPoint(world) : world;
+
+				var x = Mathf.RoundToInt(local.x / tileSize);
+				var y = Mathf.RoundToInt(local.y / tileSize);
 				var board = Runner.Board;
 				if (board == null) return;
 				// Bounds check

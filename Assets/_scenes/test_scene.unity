@@ -135,7 +135,6 @@ GameObject:
   - component: {fileID: 21954456}
   - component: {fileID: 21954455}
   - component: {fileID: 21954458}
-  - component: {fileID: 21954459}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -261,22 +260,6 @@ MonoBehaviour:
     mipBias: 0
     varianceClampScale: 0.9
     contrastAdaptiveSharpening: 0
---- !u!114 &21954459
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 21954454}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 94dfc6df5ddf4b74bb16de1ad55185f9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Runner: {fileID: 1117689035}
-  BoardView: {fileID: 754443400}
-  Padding: 0.5
-  CenterOnBoard: 1
 --- !u!1 &395237608
 GameObject:
   m_ObjectHideFlags: 0
@@ -322,7 +305,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Runner: {fileID: 1117689035}
-  TileSize: 1
+  BoardView: {fileID: 754443400}
+  Fitter: {fileID: 0}
 --- !u!1 &754443397
 GameObject:
   m_ObjectHideFlags: 0
@@ -333,6 +317,7 @@ GameObject:
   m_Component:
   - component: {fileID: 754443399}
   - component: {fileID: 754443400}
+  - component: {fileID: 754443401}
   m_Layer: 0
   m_Name: BoardView
   m_TagString: Untagged
@@ -375,6 +360,25 @@ MonoBehaviour:
   Green: {fileID: 21300000, guid: 1e4ca2d08dc6cd94887bfaf372f71d62, type: 3}
   Yellow: {fileID: 21300000, guid: 326f8f049f369d0498b817eed06c4cb2, type: 3}
   Purple: {fileID: 21300000, guid: 8834cfbe00fe81447aeca19f7db75db9, type: 3}
+--- !u!114 &754443401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 754443397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94dfc6df5ddf4b74bb16de1ad55185f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Runner: {fileID: 1117689035}
+  BoardView: {fileID: 754443400}
+  targetCamera: {fileID: 21954456}
+  paddingTop: 0.5
+  paddingBottom: 0.5
+  paddingLeft: 0.5
+  paddingRight: 0.5
 --- !u!1 &1117689032
 GameObject:
   m_ObjectHideFlags: 0
