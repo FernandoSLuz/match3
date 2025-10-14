@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Level_1
   m_EditorClassIdentifier: 
   Id: level_001
-  Width: 8
+  Width: 5
   Height: 8
   Seed: 12345
   Colors: 0100000002000000030000000400000005000000
