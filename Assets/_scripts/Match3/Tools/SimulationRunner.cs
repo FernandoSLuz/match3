@@ -66,7 +66,7 @@ namespace Lighthouse.Match3.Tools
             eventBus.Subscribe<AnimationCompleteEvent>(e => animationComplete = true);
 
             // Emit level start
-            eventBus.Publish(new LevelStartEvent { LevelId = Level.Id, Seed = Level.Seed, Width = Level.Width, Height = Level.Height });
+            eventBus.Publish(new LevelStartEvent { LevelId = Level.Id, Seed = Level.Seed, Width = Level.Width, Height = Level.Height, Colors = Level.Colors });
         }
 
         void Update()

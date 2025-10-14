@@ -101,6 +101,7 @@ namespace Lighthouse.Match3.Application.TurnManager
                     var removedPositions = new System.Collections.Generic.List<BoardPosition>();
                     foreach (var r in removals) removedPositions.Add(r.Position);
                     eventBus.Publish(new TilesRemovedEvent { TurnIndex = turnIndex, CascadeIndex = cascadeIndex, Positions = removedPositions });
+                    eventBus.Publish(new TilesRemovedInfoEvent { TurnIndex = turnIndex, CascadeIndex = cascadeIndex, Infos = removals });
                     yield return waitCallback();
                 }
 

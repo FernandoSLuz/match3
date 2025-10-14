@@ -13,7 +13,27 @@ MonoBehaviour:
   m_Name: Level_1
   m_EditorClassIdentifier: 
   Id: level_001
-  Width: 5
-  Height: 8
+  Width: 6
+  Height: 5
   Seed: 12345
-  Colors: 0100000002000000030000000400000005000000
+  Tiles:
+  - Id: blue
+    Alias: Water Magic
+    Color: 2
+    Sprite: {fileID: 21300000, guid: b8d47ea0768ef0a4a8a323c2abd78461, type: 3}
+  - Id: red
+    Alias: Fire Magic
+    Color: 1
+    Sprite: {fileID: 21300000, guid: 9cbcb13bcc2d775489ff5f48ea9276b6, type: 3}
+  - Id: purple
+    Alias: Lightning Magic
+    Color: 5
+    Sprite: {fileID: 21300000, guid: 8834cfbe00fe81447aeca19f7db75db9, type: 3}
+  - Id: Yellow
+    Alias: Holy Magic
+    Color: 4
+    Sprite: {fileID: 21300000, guid: 326f8f049f369d0498b817eed06c4cb2, type: 3}
+  - Id: Green
+    Alias: Nature Magic
+    Color: 3
+    Sprite: {fileID: 21300000, guid: 1e4ca2d08dc6cd94887bfaf372f71d62, type: 3}

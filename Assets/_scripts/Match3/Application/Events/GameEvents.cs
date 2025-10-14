@@ -1,4 +1,5 @@
 using Lighthouse.Match3.Domain.BoardState;
+using Lighthouse.Match3.Domain.TileModel;
 using Lighthouse.Shared.EventBus;
 namespace Lighthouse.Match3.Application.Events
 {
@@ -8,6 +9,7 @@ namespace Lighthouse.Match3.Application.Events
         public int Seed;
         public int Width;
         public int Height;
+        public TileColor[] Colors; // available tile colors for this level
     }
 
     public struct MoveAttemptedEvent : IGameEvent
@@ -38,6 +40,16 @@ namespace Lighthouse.Match3.Application.Events
         public int TurnIndex;
         public int CascadeIndex;
         public System.Collections.Generic.List<BoardPosition> Positions;
+    }
+
+    // Detailed removal info including the removed Tile data (color/type).
+    // This allows systems like scoring/energy to aggregate by element without
+    // coupling to the board implementation.
+    public struct TilesRemovedInfoEvent : IGameEvent
+    {
+        public int TurnIndex;
+        public int CascadeIndex;
+        public System.Collections.Generic.List<TileRemovalInfo> Infos;
     }
 
     public struct TilesMovedEvent : IGameEvent
