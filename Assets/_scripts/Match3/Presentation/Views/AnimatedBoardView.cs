@@ -15,11 +15,6 @@ namespace Lighthouse.Match3.Presentation.Views
         public SimulationRunner Runner;
         public TransitionConfig Transitions;
         public float TileSize = 1f;
-        public Sprite Red;
-        public Sprite Blue;
-        public Sprite Green;
-        public Sprite Yellow;
-        public Sprite Purple;
 
         private GameObject[,] visuals;
         private EventBus eventBus;
@@ -111,15 +106,8 @@ namespace Lighthouse.Match3.Presentation.Views
 
         private Sprite SpriteFor(TileColor color)
         {
-            switch (color)
-            {
-                case TileColor.Red: return Red;
-                case TileColor.Blue: return Blue;
-                case TileColor.Green: return Green;
-                case TileColor.Yellow: return Yellow;
-                case TileColor.Purple: return Purple;
-                default: return null;
-            }
+            if (Runner.Level != null) return Runner.Level.GetSprite(color);
+            return null;
         }
 
         // Selection visuals
