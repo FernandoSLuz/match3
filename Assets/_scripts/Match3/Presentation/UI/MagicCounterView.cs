@@ -9,6 +9,7 @@ namespace Lighthouse.Match3.Presentation.UI
 	{
 		public Image Icon;
 		public TMP_Text ValueText;
+		public Button ClickButton;
 		[HideInInspector] public TileColor Color;
 
 		public void SetIcon(Sprite sprite)
@@ -19,6 +20,13 @@ namespace Lighthouse.Match3.Presentation.UI
 		public void SetValue(int value)
 		{
 			if (ValueText != null) ValueText.text = value.ToString();
+		}
+
+		public void SetOnClick(System.Action onClick)
+		{
+			if (ClickButton == null || onClick == null) return;
+			ClickButton.onClick.RemoveAllListeners();
+			ClickButton.onClick.AddListener(() => onClick());
 		}
 	}
 }
