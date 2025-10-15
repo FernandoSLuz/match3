@@ -29,7 +29,7 @@ namespace Lighthouse.Match3.Tools
         public Board Board => board;
         public EventBus Bus => eventBus;
 
-        void Start()
+        void Awake()
         {
             if (Level == null)
             {

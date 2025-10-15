@@ -3,6 +3,7 @@ using UnityEngine;
 using Lighthouse.Match3.Domain.TileModel;
 using Lighthouse.Shared.Gameplay;
 using Lighthouse.Match3.Configs;
+using Lighthouse.TowerDefense.Application.Integration;
 
 namespace Lighthouse.Match3.Presentation.UI
 {
@@ -14,15 +15,16 @@ namespace Lighthouse.Match3.Presentation.UI
 		public GameObject CounterPrefab; // must contain MagicCounterView
 		public Tools.SimulationRunner Runner;
 		public MagicEnergyService EnergyService;
+		public TowerDefenseIntegration TowerDefense;
 
 
 		private readonly Dictionary<TileColor, MagicCounterView> colorToView = new Dictionary<TileColor, MagicCounterView>();
 
 		void Start()
 		{
-			if (Parent == null || CounterPrefab == null || Runner == null || EnergyService == null)
+			if (Parent == null || CounterPrefab == null || Runner == null || EnergyService == null || TowerDefense == null)
 			{
-				Debug.LogError("MagicCounterPanel requires Parent, CounterPrefab, Runner, EnergyService");
+				Debug.LogError("MagicCounterPanel requires Parent, CounterPrefab, Runner, EnergyService, TowerDefense");
 				enabled = false;
 				return;
 			}
@@ -62,7 +64,16 @@ namespace Lighthouse.Match3.Presentation.UI
 				view.SetIcon(GetSprite(color));
 				view.SetValue(0);
 				colorToView[color] = view;
+				view.SetOnClick(() => OnCounterClicked(color));
 			}
+		}
+
+		private void OnCounterClicked(TileColor color)
+		{
+			// Attempt to cast using all available charges of this color
+			var charges = EnergyService.Get(color);
+			if (charges <= 0) return; // later we can trigger feedback
+			TowerDefense.TryCast(color, charges);
 		}
 
 		private void OnDestroy()
